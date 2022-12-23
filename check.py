@@ -4,6 +4,25 @@ from datetime import datetime
 
 from loader import read_disruption
 
+DISRUPTION_KEYS = [
+    'AlertID',
+    'Title',
+    'Description',
+    'Status',
+    'Scope',
+    'Direction',
+    'Level',
+    'StartTime',
+    'EndTime',
+]
+
+SCOPE_KEYS = [
+    'Stations',
+    'Lines',
+    'Trains',
+    'AllStations',
+]
+
 
 def check_id(disruption: dict) -> bool:
     id = disruption['AlertID']
@@ -82,6 +101,10 @@ def check_scope(disruption: dict) -> bool:
 
     if scope.get("AllStations") and not isinstance(scope["AllStations"], bool):
         print(f'Scope AllStations {scope["AllStations"]} should be bool')
+        return False
+
+    if scope.keys() - set(SCOPE_KEYS):
+        print(f'Scope {scope.keys()} should be in {SCOPE_KEYS}')
         return False
 
     return True
@@ -193,6 +216,10 @@ def check_disruption(disruption: dict) -> bool:
 
     if not check_end_time(disruption):
         print(f'Invalid end time: {disruption["EndTime"]}')
+        return False
+
+    if disruption.keys() - set(DISRUPTION_KEYS):
+        print(f'Disruption {disruption.keys()} should be in {DISRUPTION_KEYS}')
         return False
 
     return True
