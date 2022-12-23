@@ -33,8 +33,8 @@ def check_description(disruption: dict) -> bool:
     if not isinstance(description, str):
         return False
 
-    if not 9 < len(description) < 256:
-        print(f'Description {description} length should in 10 - 255')
+    if not 3 < len(description) < 256:
+        print(f'Description {description} length should in 4 - 255')
         return False
 
     return True
