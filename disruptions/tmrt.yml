@@ -1,0 +1,6 @@
+- AlertID: tmrt-permanent-1
+  Title: 台中捷運時刻表僅供參考
+  Description: 非官方。
+  Status: 4
+  Scope:
+    LineID: [ "G" ]
