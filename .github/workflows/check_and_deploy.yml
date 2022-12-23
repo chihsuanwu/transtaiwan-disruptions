@@ -1,0 +1,62 @@
+# check all disruptions have correct format, then deploy to aws if check passes
+name: Check and Deploy
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  check:
+    name: Check disruptions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Check disruptions
+        run: |
+          python check.py
+
+  # Only deploy if check passes and on push to main branch
+  deploy:
+    name: Deploy to AWS
+    needs: [check]
+    if: ${{ success() && github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Create disruptions.json from disruptions folder
+        run: |
+          python create_json.py
+      - name: Load disruptions.json into payload
+        id: create_payload
+        run: |
+          content=`cat ./disruptions.json`
+          echo "::set-output name=payload::$content"
+      - name: Invoke Lambda
+        uses: gagoar/invoke-aws-lambda@master
+        with:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          REGION: ${{ secrets.AWS_REGION }}
+          FunctionName: ttwCustomDisruptionCollector
+          Payload: ${{ steps.create_payload.outputs.payload }}
+      - name: Store response payload to file
+        run: echo '${{ fromJSON(steps.foobar.outputs.response).Payload }}' > invocation-response.json
