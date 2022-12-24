@@ -2,27 +2,13 @@
 
 from datetime import datetime
 
-from loader import read_disruption
+from loader import read_disruption, check_directory
+import const
 
-DISRUPTION_KEYS = [
-    'AlertID',
-    'Title',
-    'Description',
-    'Status',
-    'Scope',
-    'Direction',
-    'Level',
-    'StartTime',
-    'EndTime',
-]
 
-SCOPE_KEYS = [
-    'Stations',
-    'Lines',
-    'Trains',
-    'AllStations',
-]
-
+DISRUPTION_KEYS = const.DISRUPTION_KEYS
+SCOPE_KEYS = const.SCOPE_KEYS
+AVALIABLE_LINES = const.LINES
 
 def check_id(disruption: dict) -> bool:
     id = disruption['AlertID']
@@ -72,7 +58,7 @@ def check_status(disruption: dict) -> bool:
     return True
 
 
-def check_scope(disruption: dict) -> bool:
+def check_scope(disruption: dict, op: str) -> bool:
     scope = disruption.get('Scope')
 
     if not scope:
@@ -91,6 +77,10 @@ def check_scope(disruption: dict) -> bool:
         not isinstance(scope["Lines"], list) or
         not all(isinstance(l, str) for l in scope["Lines"])):
         print(f'Scope Lines {scope["Lines"]} should be list[str]')
+        return False
+
+    if scope.get("Lines") and not all(l in AVALIABLE_LINES.get(op, []) for l in scope["Lines"]):
+        print(f'Scope Lines {scope["Lines"]} should be in {AVALIABLE_LINES.get(op, [])}')
         return False
 
     if scope.get("Trains") and (
@@ -178,7 +168,7 @@ def check_time(time):
     return True
 
 
-def check_disruption(disruption: dict) -> bool:
+def check_disruption(disruption: dict, op: str) -> bool:
     if not isinstance(disruption, dict):
         return False
 
@@ -198,7 +188,7 @@ def check_disruption(disruption: dict) -> bool:
         print(f'Invalid status: {disruption["Status"]}')
         return False
 
-    if not check_scope(disruption):
+    if not check_scope(disruption, op):
         print(f'Invalid scope: {disruption["Scope"]}')
         return False
 
@@ -228,7 +218,7 @@ def check_disruption(disruption: dict) -> bool:
 def check_data(op: str) -> bool:
     data = read_disruption(op)
 
-    result = [ (d.get("AlertID"), check_disruption(d)) for d in data ]
+    result = [ (d.get("AlertID"), check_disruption(d, op)) for d in data ]
 
     # Check all id is unique
     ids = [ r[0] for r in result ]
@@ -243,7 +233,10 @@ def check_data(op: str) -> bool:
 
 
 def main():
-    oper = ['tra', 'thsr', 'trtc', 'krtc', 'tymc', 'tmrt', 'klrt', 'ntdlrt']
+    if not check_directory():
+        assert False
+
+    oper = const.operator
 
     result = { op: check_data(op) for op in oper }
 

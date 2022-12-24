@@ -1,11 +1,9 @@
 import json
 
 from loader import read_disruption
-
+from const import operator
 
 def main():
-    operator = [ 'tra', 'thsr', 'trtc', 'krtc', 'tymc', 'tmrt', 'klrt', 'ntdlrt' ]
-
     all_disruptions = {}
     for op in operator:
         data = read_disruption(op)
