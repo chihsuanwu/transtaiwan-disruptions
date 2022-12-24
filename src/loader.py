@@ -15,7 +15,11 @@ def read_disruption(op: str) -> list[dict]:
         return []
 
     with open(path, encoding='utf-8') as file:
-        disruption = yaml.safe_load(file)
+        try:
+            disruption = yaml.safe_load(file)
+        except yaml.YAMLError as exc:
+            print(exc)
+            return None
 
     return disruption
 

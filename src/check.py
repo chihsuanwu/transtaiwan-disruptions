@@ -11,7 +11,7 @@ SCOPE_KEYS = const.SCOPE_KEYS
 AVALIABLE_LINES = const.LINES
 
 def check_id(disruption: dict) -> bool:
-    id = disruption['AlertID']
+    id = disruption.get('AlertID')
 
     if not isinstance(id, str):
         return False
@@ -20,7 +20,7 @@ def check_id(disruption: dict) -> bool:
 
 
 def check_title(disruption: dict) -> bool:
-    title = disruption['Title']
+    title = disruption.get('Title')
 
     if not isinstance(title, str):
         return False
@@ -33,7 +33,7 @@ def check_title(disruption: dict) -> bool:
 
 
 def check_description(disruption: dict) -> bool:
-    description = disruption['Description']
+    description = disruption.get('Description')
 
     if not isinstance(description, str):
         return False
@@ -46,7 +46,7 @@ def check_description(disruption: dict) -> bool:
 
 
 def check_status(disruption: dict) -> bool:
-    status = disruption['Status']
+    status = disruption.get('Status')
 
     if not isinstance(status, int):
         return False
@@ -173,39 +173,39 @@ def check_disruption(disruption: dict, op: str) -> bool:
         return False
 
     if not check_id(disruption):
-        print(f'Invalid id: {disruption["AlertID"]}')
+        print(f'Invalid id: {disruption.get("AlertID")}')
         return False
 
     if not check_title(disruption):
-        print(f'Invalid title: {disruption["Title"]}')
+        print(f'Invalid title: {disruption.get("Title")}')
         return False
 
     if not check_description(disruption):
-        print(f'Invalid description: {disruption["Description"]}')
+        print(f'Invalid description: {disruption.get("Description")}')
         return False
 
     if not check_status(disruption):
-        print(f'Invalid status: {disruption["Status"]}')
+        print(f'Invalid status: {disruption.get("Status")}')
         return False
 
     if not check_scope(disruption, op):
-        print(f'Invalid scope: {disruption["Scope"]}')
+        print(f'Invalid scope: {disruption.get("Scope")}')
         return False
 
     if not check_direction(disruption):
-        print(f'Invalid direction: {disruption["Direction"]}')
+        print(f'Invalid direction: {disruption.get("Direction")}')
         return False
 
     if not check_level(disruption):
-        print(f'Invalid level: {disruption["Level"]}')
+        print(f'Invalid level: {disruption.get("Level")}')
         return False
 
     if not check_start_time(disruption):
-        print(f'Invalid start time: {disruption["StartTime"]}')
+        print(f'Invalid start time: {disruption.get("StartTime")}')
         return False
 
     if not check_end_time(disruption):
-        print(f'Invalid end time: {disruption["EndTime"]}')
+        print(f'Invalid end time: {disruption.get("EndTime")}')
         return False
 
     if disruption.keys() - set(DISRUPTION_KEYS):
@@ -217,6 +217,10 @@ def check_disruption(disruption: dict, op: str) -> bool:
 
 def check_data(op: str) -> bool:
     data = read_disruption(op)
+
+    if not isinstance(data, list):
+        print(f'Error: {op} data corrupted')
+        return False
 
     result = [ (d.get("AlertID"), check_disruption(d, op)) for d in data ]
 
