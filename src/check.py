@@ -61,9 +61,6 @@ def check_status(disruption: dict) -> bool:
 def check_scope(disruption: dict, op: str) -> bool:
     scope = disruption.get('Scope')
 
-    if not scope:
-        return True
-
     if not isinstance(scope, dict):
         return False
 
