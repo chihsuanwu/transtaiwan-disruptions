@@ -4,9 +4,3 @@
   Status: 4
   Scope:
     Lines: [ "G" ]
-- AlertID: tmrt-alert-20230510
-  Title: 營運異常
-  Description: 北屯總站至市政府站及九張犁站至高鐵臺中站局部運轉。
-  Status: 0
-  Scope:
-    Lines: [ "G" ]
