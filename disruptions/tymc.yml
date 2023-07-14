@@ -1,6 +1,1 @@
-- AlertID: tymc-permanent-1
-  Title: 系統異常
-  Description: 因系統異常，往機場及中壢方向旅客若需於A8長庚醫院站轉乘直達車之旅客請於月台稍候，造成不便敬請見諒。
-  Status: 2
-  Scope:
-    Lines: [ "A" ]
+[]
