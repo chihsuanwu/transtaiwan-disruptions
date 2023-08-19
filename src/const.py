@@ -28,7 +28,7 @@ DISRUPTION_KEYS = [
     'Description',
     'Status',
     'Scope',
-    'Direction',
+    'direction',
     'Level',
     'StartTime',
     'EndTime',

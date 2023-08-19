@@ -98,7 +98,7 @@ def check_scope(disruption: dict, op: str) -> bool:
 
 
 def check_direction(disruption: dict) -> bool:
-    direction = disruption.get('Direction')
+    direction = disruption.get('direction')
 
     if not direction:
         return True
@@ -107,7 +107,7 @@ def check_direction(disruption: dict) -> bool:
         return False
 
     if direction not in [0, 1, 2]:
-        print(f'Direction {direction} should be 0, 1, 2')
+        print(f'direction {direction} should be 0, 1, 2')
         return False
 
     return True
