@@ -25,8 +25,8 @@ def check_title(disruption: dict) -> bool:
     if not isinstance(title, str):
         return False
 
-    if not 3 < len(title) < 16:
-        print(f'Title {title} length should in 4 - 15')
+    if not 3 < len(title) < 26:
+        print(f'Title {title} length should in 4 - 25')
         return False
 
     return True
@@ -38,8 +38,8 @@ def check_description(disruption: dict) -> bool:
     if not isinstance(description, str):
         return False
 
-    if not 3 < len(description) < 256:
-        print(f'Description {description} length should in 4 - 255')
+    if not 3 < len(description) < 401:
+        print(f'Description {description} length should in 4 - 400')
         return False
 
     return True
