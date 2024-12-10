@@ -1,0 +1,12 @@
+- AlertID: sbbcffffs
+  Title: 劍潭-士林積雪過多暫停營運
+  Description: 因劍潭士林間積雪過多，已派員處理，預計明日上午九時前搶通。
+  Status: 2
+  Scope:
+    Stations:
+    - TRTC-R15
+    - TRTC-R16
+  Direction: 2
+  Level: 1
+  StartTime: 2022-12-23T17:05:00+08:00
+  EndTime: 2022-12-24T08:59:59+08:00
